@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 var { nanoid } = require("nanoid"); // https://stackoverflow.com/questions/61374991/how-to-use-nanoid-module-on-nodejs
 
 const server = express();
 server.use(express.json());
+server.use(cors());
 
 server.get("/hello", (req, res) => {
   res.send("hello world");
