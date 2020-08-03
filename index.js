@@ -83,6 +83,24 @@ server.delete("/api/users/:id", (req, res) => {
 
 // UPDATE user
 server.put("/api/users/:id", (req, res) => {
+  const id = req.params.id;
+  const { name, bio } = req.body;
+  const foundUser = users.find((user) => user.id === id);
+
+  if (!name || !bio) {
+    res
+      .status(400)
+      .json({ errorMessage: "Please provide name and bio for the user." });
+  } else {
+    if (foundUser) {
+      Object.assign(foundUser, { name, bio });
+      res.status(200).json(foundUser);
+    } else {
+      res
+        .status(404)
+        .json({ message: "The user with the specified ID does not exist." });
+    }
+  }
   // 1. updates the user with the specified id using data from the request body
   // 2. returns the modified user
 });
