@@ -37,7 +37,9 @@ server.get("/api/users/:id", (req, res) => {
   // --> if undefined ... "user not found"
   foundUser
     ? res.status(200).json(foundUser)
-    : res.status(200).send("user not found");
+    : res
+        .status(200)
+        .json({ message: "The user with the specified ID does not exist." });
 });
 
 // POST user (requires NAME & BIO)
@@ -59,12 +61,24 @@ server.post("/api/users", (req, res) => {
 
 // DELETE user (from ID)
 server.delete("/api/users/:id", (req, res) => {
-  // save id from url ^^
   const id = req.params.id;
   // tries to find user
   const foundUser = users.find((user) => user.id === id);
   // 1. removes the user with the specified id
-  // 2. returns the deleted user
+  // --> https://stackoverflow.com/questions/15287865/remove-array-element-based-on-object-property
+  if (foundUser) {
+    for (var i = users.length - 1; i >= 0; --i) {
+      if (users[i].id == id) {
+        users.splice(i, 1);
+      }
+    }
+    // 2. returns the deleted user
+    res.status(200).json(foundUser);
+  } else {
+    res
+      .status(404)
+      .json({ message: "The user with the specified ID does not exist." });
+  }
 });
 
 // UPDATE user
