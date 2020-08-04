@@ -30,3 +30,22 @@ ul {
 
   background-color: white;
 }
+
+.Users {
+  margin: 2% 0;
+  padding: 0 2%;
+
+  font-size: 1rem;
+}
+
+.user-form-container {
+  border-top: 1px solid #333;
+  width: 98%; 
+  margin: 0 auto; 
+}
+.user-form-container {
+  padding: 2% 2%;
+}
+.user-form {
+  margin: 2% 0 4%;
+}

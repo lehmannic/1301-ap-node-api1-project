@@ -67,6 +67,9 @@ server.post("/api/users", (req, res) => {
         .status(400)
         .json({ errorMessage: "Please provide name and bio for the user." });
     } else {
+      // if (true) {
+      //   throw new Error("Test error!");
+      // }
       users.push(newUser);
       res.status(201).json(newUser);
     }
