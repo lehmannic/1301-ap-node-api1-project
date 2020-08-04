@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useMutation, queryCache } from "react-query";
@@ -9,6 +9,7 @@ import useAllUsers from "./queries/useAllUsers";
 
 function Users() {
   const usersInfo = useAllUsers();
+  console.log("users render");
 
   // [1]
   return usersInfo.isLoading ? (
@@ -17,7 +18,7 @@ function Users() {
     usersInfo.error.message
   ) : (
     <div className='Users'>
-      <h1>Users {usersInfo.isFetching && "..."}</h1>
+      <h1>Users {usersInfo.isFetching && "..."} </h1>
       <ul>
         {usersInfo.data.map((user) => {
           return (
@@ -27,11 +28,13 @@ function Users() {
           );
         })}
       </ul>
+      <pre>{JSON.stringify(usersInfo.data, null, 2)}</pre>
     </div>
   );
 }
 
 function UserForm() {
+  console.log("Form render");
   // [2]
   const { register, handleSubmit, errors, reset } = useForm();
 
@@ -83,10 +86,13 @@ function UserForm() {
 }
 
 function App() {
+  console.log("App render");
   return (
     <>
-      <Users />
-      <UserForm />
+      <div className='App'>
+        <Users />
+        <UserForm />
+      </div>
       <ReactQueryDevtools />
     </>
   );

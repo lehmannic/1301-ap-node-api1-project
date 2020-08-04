@@ -20,6 +20,10 @@ ul {
   margin: 0;
 }
 
+li {
+  margin: 4px 8px;
+}
+
 .container {
   margin: 4% 2%;
   padding: 4%;
@@ -31,7 +35,13 @@ ul {
   background-color: white;
 }
 
+.App {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .Users {
+  width: 50%;
   margin: 2% 0;
   padding: 0 2%;
 
@@ -39,9 +49,9 @@ ul {
 }
 
 .user-form-container {
-  border-top: 1px solid #333;
-  width: 98%; 
-  margin: 0 auto; 
+  border-left: 1px solid #333;
+  width: 45%;
+  margin: 4% auto;
 }
 .user-form-container {
   padding: 2% 2%;
