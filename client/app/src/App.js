@@ -34,6 +34,8 @@ function Users() {
 }
 
 function UserForm() {
+  // [6]
+  const usersInfoAGAIN = useAllUsers();
   console.log("Form render");
   // [2]
   const { register, handleSubmit, errors, reset } = useForm();
@@ -57,7 +59,12 @@ function UserForm() {
     }
   );
 
-  return (
+  // [6]
+  return usersInfoAGAIN.isLoading ? (
+    "Loading Users ..."
+  ) : usersInfoAGAIN.isError ? (
+    usersInfoAGAIN.error.message
+  ) : (
     <div className='user-form-container'>
       <h3>Add a New User!</h3>
       <form onSubmit={handleSubmit(attemptAddUser)} className='user-form'>
@@ -80,6 +87,7 @@ function UserForm() {
         {errors.name && <p>How'd you forget your name?</p>}
         {errors.bio && <p>bio: something...anything</p>}
       </form>
+      <pre>{JSON.stringify(usersInfoAGAIN.data, null, 2)}</pre>
       {addUserInfo.isError ? <pre>{addUserInfo.error.message}</pre> : null}
     </div>
   );
@@ -124,3 +132,8 @@ export default App;
 // console.log("UserForm -> error.message", error);
 // window.alert(error.message)
 // --> display TOASTS
+
+// [6]
+// showing different query using same string ⤵️
+// --> only one network request
+// --> see devtools (2 ['users'])
