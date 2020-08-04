@@ -1,13 +1,12 @@
 import React from "react";
-import "./App.css";
-import { useQuery } from "react-query";
 import { ReactQueryDevtools } from "react-query-devtools";
-import axios from "axios";
+
+import "./App.css";
+import useAllUsers from "./queries/useAllUsers";
 
 function Users() {
-  const usersInfo = useQuery("users", () =>
-    axios.get("http://localhost:8000/api/users").then((res) => res.data)
-  );
+  const usersInfo = useAllUsers();
+
   return (
     <div className='Users'>
       <h1>Users {usersInfo.isFetching && "..."}</h1>
