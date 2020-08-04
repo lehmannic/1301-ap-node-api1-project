@@ -24,6 +24,11 @@ li {
   margin: 4px 8px;
 }
 
+h1,
+h5:hover {
+  cursor: pointer;
+}
+
 .container {
   margin: 4% 2%;
   padding: 4%;

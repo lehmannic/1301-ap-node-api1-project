@@ -6,10 +6,16 @@ import { ReactQueryDevtools } from "react-query-devtools";
 
 import "./App.css";
 import useAllUsers from "./queries/useAllUsers";
+import useThisUser from "./queries/useThisUser";
 
 function Users() {
+  // [7]
+  const [id, setID] = React.useState("");
   const usersInfo = useAllUsers();
   console.log("users render");
+
+  // [8]
+  const thisUser = useThisUser({ id });
 
   // [1]
   return usersInfo.isLoading ? (
@@ -18,12 +24,21 @@ function Users() {
     usersInfo.error.message
   ) : (
     <div className='Users'>
-      <h1>Users {usersInfo.isFetching && "..."} </h1>
+      <>
+        {/* [9a] */}
+        <h1 onClick={() => setID("")}>
+          Users {usersInfo.isFetching && "..."} {id}
+        </h1>
+        {/* [9b] */}
+        <h2>{thisUser?.data?.bio}</h2>
+      </>
+
       <ul>
         {usersInfo.data.map((user) => {
           return (
             <li key={user.id}>
-              <h5>{user.name}</h5>
+              {/* [9a] */}
+              <h5 onClick={() => setID(user.id)}>{user.name}</h5>
             </li>
           );
         })}
@@ -137,3 +152,18 @@ export default App;
 // showing different query using same string ⤵️
 // --> only one network request
 // --> see devtools (2 ['users'])
+
+// [7] INTERACTING WITH "UI" STATE id
+// --> need somewhere to hold id
+// --> commonly used in ui
+// --> id is the access key to the rest of the data
+
+// [8]
+// query for user info based on id
+// --> stores data in cache even when its no longer on screen
+// --> comes back right away next time ⚡️
+
+// [9]
+//  a. onClick toggle id that is being held in state
+// --> remember: [8] is querying based on current id in state
+//  b. show bio from data received in query from [8]
