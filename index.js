@@ -1,10 +1,32 @@
 const express = require("express");
+const request = require("request"); //  [2.]
+const morgan = require("morgan");
+const helmet = require("helmet");
 const cors = require("cors");
-var { nanoid } = require("nanoid"); // https://stackoverflow.com/questions/61374991/how-to-use-nanoid-module-on-nodejs
+var { nanoid } = require("nanoid"); //  [1.] https://stackoverflow.com/questions/61374991/how-to-use-nanoid-module-on-nodejs
 
 const server = express();
 server.use(express.json());
 server.use(cors());
+server.use(morgan("dev"));
+server.use(helmet());
+
+//  [2.] https://medium.com/@dtkatz/3-ways-to-fix-the-cors-error-and-how-access-control-allow-origin-works-d97d55946d9
+server.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+server.get("/golfers", (req, res) => {
+  request(
+    { url: "https://pygolf.jacoduplessis.co.za/api" },
+    (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.status(500).json({ type: "error", message: error.message });
+      }
+      res.json(JSON.parse(body));
+    }
+  );
+});
 
 server.get("/hello", (req, res) => {
   res.send("hello world");

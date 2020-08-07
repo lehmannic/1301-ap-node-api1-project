@@ -1,12 +1,101 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useMutation, queryCache } from "react-query";
+import { useMutation, queryCache, useQuery } from "react-query";
 import { ReactQueryDevtools } from "react-query-devtools";
 
 import "./App.css";
 import useAllUsers from "./queries/useAllUsers";
 import useThisUser from "./queries/useThisUser";
+
+
+import useAllGolfers from "./queries/useAllGolfers";
+function Golfers() {
+  const [allGolfers, setAllGolfers] = React.useState([]);
+  const golfers = useAllGolfers();
+  // console.log(golfers);
+  const desiredPlayers = new Set([
+    "Brooks Koepka",
+    "Bryson Dechambeau",
+    "Justin Thomas",
+    "Xander Schauffele",
+    "Dustin Johnson",
+    "Jon Rahm",
+    "Rory Mcilroy",
+    "Jordan Spieth",
+    "Patrick Cantlay",
+    "Tiger Woods",
+    "Rickie Fowler",
+    "Webb Simpson",
+    "Jason Day",
+    "Collin Morikawa",
+    "Viktor Hovland",
+    "Justin Rose",
+    "Tony Finau",
+    "Tommy Fleetwood",
+    "Gary Woodland",
+    "Patrick Reed",
+    "Adam Scott",
+    "Sergio Garcia",
+    "Phil Mickelson",
+    "Matthew Fitzpatrick",
+    "Shane Lowry",
+    "Louis Oosthuizen",
+    "Daniel Berger",
+    "Marc Leishman",
+    "Abraham Ancer",
+    "Cameron Champ",
+    "Lucas Glover",
+    "Hideki Matsuyama",
+    "Sungjae Im",
+    "Matthew Wolff",
+    "Matt Kuchar",
+    "Chez Reavie",
+    "Tyrrell Hatton",
+    "Brendon Todd",
+    "Scottie Scheffler",
+    "Paul Casey",
+  ]);
+  let results = [];
+
+  results = golfers.data?.reduce((acc, cur) => {
+    if (desiredPlayers.has(cur.name)) {
+      if (!acc[cur.name]) {
+        acc[cur.name] = { events: [], name: cur.name };
+      }
+      acc.push(cur);
+    }
+    return acc;
+  }, []);
+  console.log(results);
+
+  return golfers.isLoading ? (
+    "loading"
+  ) : golfers.isError ? (
+    "error"
+  ) : results ? (
+    <>
+      <ul>
+        {results.map((user) => {
+          return (
+            <li key={Date.now()}>
+              <h5>{user.name}</h5>
+              <p>total: {user.strokes}</p>
+              <p>
+                today: {user.today} thru: {user.hole}
+              </p>
+              <p>round 1: {user.rounds[0]}</p>
+              <p>round 2: {user.rounds[1]}</p>
+              <p>round 3: {user.rounds[2]}</p>
+              <p>round 4: {user.rounds[3]}</p>
+            </li>
+          );
+        })}
+      </ul>
+      {/* <pre>{JSON.stringify(results, null, 2)}</pre> */}
+    </>
+  ) : null;
+}
 
 function Users() {
   // [7]
@@ -115,6 +204,9 @@ function App() {
       <div className='App'>
         <Users />
         <UserForm />
+      </div>
+      <div>
+        <Golfers />
       </div>
       <ReactQueryDevtools />
     </>
